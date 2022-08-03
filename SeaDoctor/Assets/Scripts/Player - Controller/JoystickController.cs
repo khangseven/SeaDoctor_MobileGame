@@ -15,16 +15,16 @@ public class JoystickController : MonoBehaviour
 
     private void Start(){
         radius = JoystickBG.GetComponent<RectTransform>().sizeDelta.y/4;
-        JoystickBG.active = false;
-        JoystickCT.active = false;
+        // JoystickBG.active = false;
+        // JoystickCT.active = false;
     }
 
     public void OnPointerDown(){
         JoystickBG.transform.position = Input.mousePosition;
         JoystickCT.transform.position = Input.mousePosition;
         touchPosition = Input.mousePosition;
-        JoystickBG.active = true;
-        JoystickCT.active = true;
+        // JoystickBG.active = true;
+        // JoystickCT.active = true;
     }
 
     public void Drag(BaseEventData baseEventData){
@@ -43,7 +43,7 @@ public class JoystickController : MonoBehaviour
 
     public void OnPointerUp(){
         Velocity = Vector2.zero;
-        JoystickBG.active = false;
-        JoystickCT.active = false;
+        // JoystickBG.active = false;
+        // JoystickCT.active = false;
     }
 }
