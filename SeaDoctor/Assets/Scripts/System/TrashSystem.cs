@@ -27,8 +27,8 @@ public class TrashSystem : MonoBehaviour
                     randVec= randVec* (minRange/randVec.magnitude);
                     Debug.Log(randVec.ToString());
                 }
-                GameObject temp = Instantiate(trashes[k],new Vector3(randVec.x,0.2f,randVec.y),trashes[k].transform.rotation);
-                temp.isStatic = true;
+                GameObject temp = Instantiate(trashes[k],new Vector3(randVec.x,trashes[k].transform.position.y,randVec.y),new Quaternion());
+                //temp.isStatic = true;
                 temp.transform.parent = parent.transform;
             }
         }
