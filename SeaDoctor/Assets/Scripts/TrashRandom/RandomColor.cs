@@ -12,7 +12,24 @@ public class RandomColor : MonoBehaviour
     {
         if (random)
         {
-            GetComponent<MeshRenderer>().material.color = Random.ColorHSV(0,1,0.8f,1,1,1);
+            float H = Random.Range(0f, 1f);
+            float Hmin=H, Hmax=H;
+            //Debug.Log(H);
+            if(H > 0.45f && H < 0.85f)
+            {
+                if (H > 0.65f)
+                {
+                    Hmin = 0.85f;
+                    Hmax = 1;
+                }
+                else
+                {
+                    Hmin = 0;
+                    Hmax = 0.45f;
+                }
+            }
+            //Debug.Log(Hmin + " " + Hmax);
+            GetComponent<MeshRenderer>().material.color = Random.ColorHSV(Hmin,Hmax,0.8f,1,0.5f,0.8f);
         }else
         {
             GetComponent<MeshRenderer>().material.color = color;

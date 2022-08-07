@@ -24,11 +24,10 @@ public class TrashSystem : MonoBehaviour
             for(int i=0; i< trashAmount; i++){
                 Vector2 randVec = new Vector2(Random.Range(-range,range),Random.Range(-range,range));
                 if(Mathf.Abs(randVec.magnitude) < minRange){
-                    randVec= randVec* (minRange/randVec.magnitude);
-                    Debug.Log(randVec.ToString());
+                    randVec = randVec* ((minRange + Random.Range(minRange, range-minRange-5f)) /randVec.magnitude);
                 }
-                GameObject temp = Instantiate(trashes[k],new Vector3(randVec.x,trashes[k].transform.position.y,randVec.y),new Quaternion());
-                //temp.isStatic = true;
+                GameObject temp = Instantiate(trashes[k],new Vector3(randVec.x + transform.position.x,trashes[k].transform.position.y,randVec.y + +transform.position.z),new Quaternion());
+                temp.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY;
                 temp.transform.parent = parent.transform;
             }
         }

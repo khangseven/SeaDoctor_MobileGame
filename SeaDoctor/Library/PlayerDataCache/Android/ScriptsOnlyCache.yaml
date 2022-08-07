@@ -1,13 +1,20 @@
 ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
+    - Border
     - JoystickController
     - Player
+    - PlayerText
+    - RandomColor
+    - Test
+    - Trash
     - TrashSystem
     Unity.CollabProxy.Editor.dll:
     - Unity.Cloud.Collaborate.UserInterface.CollaborateWindow
     Unity.Rider.Editor.dll:
     - Packages.Rider.Editor.UnitTesting.CallbackData
+    Unity.Timeline.dll:
+    - UnityEngine.Timeline.TimelineAsset
     UnityEditor.Graphs.dll:
     - UnityEditor.Graphs.AnimationBlendTree.Graph
     - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
@@ -25,6 +32,7 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.CanvasScaler
     - UnityEngine.UI.GraphicRaycaster
     - UnityEngine.UI.Image
+    - UnityEngine.UI.Text
   sceneClasses:
     Assets/Scenes/SampleScene.unity:
     - Class: 1
@@ -68,22 +76,38 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 1664}
     - Class: 114
-      Script: {instanceID: 2500}
+      Script: {instanceID: 2288}
     - Class: 114
-      Script: {instanceID: 2640}
+      Script: {instanceID: 2464}
     - Class: 114
-      Script: {instanceID: 2774}
+      Script: {instanceID: 2502}
     - Class: 114
-      Script: {instanceID: 2986}
+      Script: {instanceID: 2642}
     - Class: 114
-      Script: {instanceID: 3212}
+      Script: {instanceID: 2776}
     - Class: 114
-      Script: {instanceID: 3950}
+      Script: {instanceID: 2988}
     - Class: 114
-      Script: {instanceID: 4598}
+      Script: {instanceID: 3112}
     - Class: 114
-      Script: {instanceID: 4862}
+      Script: {instanceID: 3216}
+    - Class: 114
+      Script: {instanceID: 3448}
+    - Class: 114
+      Script: {instanceID: 3954}
+    - Class: 114
+      Script: {instanceID: 4114}
+    - Class: 114
+      Script: {instanceID: 4324}
+    - Class: 114
+      Script: {instanceID: 4606}
+    - Class: 114
+      Script: {instanceID: 4870}
     - Class: 115
+      Script: {instanceID: 0}
+    - Class: 120
+      Script: {instanceID: 0}
+    - Class: 128
       Script: {instanceID: 0}
     - Class: 157
       Script: {instanceID: 0}
@@ -204,7 +228,13 @@ ScriptsOnlyBuild:
     className: RawImage
   - hash:
       serializedVersion: 2
-      Hash: f7cdeec5e1d36c18eb0d90784eff4cce
+      Hash: d344f9e57dba17d55b9072800ed34d88
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: PlayerText
+  - hash:
+      serializedVersion: 2
+      Hash: 76c8de5a4e8866d52572128dce04b1d7
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: Player
@@ -294,6 +324,12 @@ ScriptsOnlyBuild:
     className: TestResultRendererCallback
   - hash:
       serializedVersion: 2
+      Hash: 26599c5af53b4b8ba7410e5691080285
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Test
+  - hash:
+      serializedVersion: 2
       Hash: 748dd2a2a28da4e618912da5ac45684b
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.EventSystems
@@ -346,6 +382,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.TextMeshPro.dll
     namespaceName: TMPro
     className: TextContainer
+  - hash:
+      serializedVersion: 2
+      Hash: 01a79bc3aaad7a77b37c18be77bbbe7c
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Trash
   - hash:
       serializedVersion: 2
       Hash: 8aa3d6ccbcb54ee8db6c1229854adaaa
@@ -450,6 +492,12 @@ ScriptsOnlyBuild:
     className: SignalTrack
   - hash:
       serializedVersion: 2
+      Hash: f9517ff43b42610eacc2805887d7a228
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: Border
+  - hash:
+      serializedVersion: 2
       Hash: aba7b2852ef61d175dd9602e7723d5e5
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
@@ -460,6 +508,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: ControlTrack
+  - hash:
+      serializedVersion: 2
+      Hash: bdb0342cba4e5e6543d067fc4d87670c
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: RandomColor
   - hash:
       serializedVersion: 2
       Hash: 3165968ba45c74472d279ba04455fccb
@@ -559,4 +613,4 @@ ScriptsOnlyBuild:
   platform: 13
   scenePathNames:
   - Assets/Scenes/SampleScene.unity
-  playerPath: C:/Users/hkhan/Desktop/test/test.apk
+  playerPath: C:/Users/hkhan/Desktop/test/test2.apk
