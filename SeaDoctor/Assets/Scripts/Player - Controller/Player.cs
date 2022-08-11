@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class Player : MonoBehaviour
 
     public Camera mainCamera;
     public Vector2 CamHeight = new Vector2(30, 25);
-    private Vector3 camVelocity = Vector3.zero;
+    
 
     private Rigidbody rbody;
 
@@ -23,10 +24,12 @@ public class Player : MonoBehaviour
     public int coin=999;
     public Text coinText;
     public Image coinBackground;
+    public Slider volumeUI;
 
     public float xRotationMax = 30f;
 
-    private float torqueSpeed = 0.07f;
+    public float containerRadius;
+    private float torqueSpeed = 0.1f;
     private float trashHeight = 0;
     private int trashCount = 0;
     private int trashRemoveCount = 0;
@@ -63,10 +66,11 @@ public class Player : MonoBehaviour
     private void LateUpdate()
     {
         //transfrom camera
+        CamHeight = mainCamera.GetComponent<CameraFollow>()._offset;
         mainCamera.transform.position = transform.position + new Vector3(0, CamHeight.x, CamHeight.y);
         //mainCamera.transform.rotation = Quaternion.LookRotation(transform.position - mainCamera.transform.position);
         //mainCamera.transform.position = Vector3.SmoothDamp(mainCamera.transform.position, transform.position + new Vector3(0, CamHeight.x, CamHeight.y), ref camVelocity, 0.25f);
-
+       
     }
 
     private void FixedUpdate()
@@ -91,7 +95,7 @@ public class Player : MonoBehaviour
             if (delayCount > delayTime) delayCount = 0;
         }
         //Simulator waving
-        if (transform.eulerAngles.x + torqueSpeed >= xRotationMax && transform.eulerAngles.x <= xRotationMax)
+       /* if (transform.eulerAngles.x + torqueSpeed >= xRotationMax && transform.eulerAngles.x <= xRotationMax)
         {
             torqueSpeed = torqueSpeed * -1f;
         }else if (transform.eulerAngles.x + torqueSpeed <= 360- xRotationMax && transform.eulerAngles.x >= 360 - xRotationMax)
@@ -101,16 +105,19 @@ public class Player : MonoBehaviour
         else
         {
             transform.eulerAngles = new Vector3(transform.eulerAngles.x + torqueSpeed, transform.eulerAngles.y, transform.eulerAngles.z);
-        }
+        }*/
 
         //update coin
         coinText.text = coin + "";
+
+        //update volume ui
+        volumeUI.value = currentVolume / volume;
     }
 
-    void OnTriggerEnter(Collider col)
+    private void OnTriggerEnter(Collider col)
     {
         GameObject obj = col.gameObject;
-        if (obj.tag == "CheckPoint")
+        if (obj.CompareTag("CheckPoint"))
         {
             onCheckPoint = true;
         }
@@ -119,7 +126,7 @@ public class Player : MonoBehaviour
     private void OnTriggerExit(Collider col)
     {
         GameObject obj = col.gameObject;
-        if (obj.tag == "CheckPoint")
+        if (obj.CompareTag("CheckPoint"))
         {
             onCheckPoint = false;
         }
@@ -128,7 +135,7 @@ public class Player : MonoBehaviour
     private void OnCollisionEnter(Collision col)
     {
         GameObject obj = col.gameObject;
-        if (obj.tag == "Trash")
+        if (obj.CompareTag("Trash") && col.contacts[0].thisCollider.name == "Collector")
         {
             Trash trash = obj.GetComponent<Trash>();
             if (currentVolume + trash.mass > volume)
@@ -141,7 +148,7 @@ public class Player : MonoBehaviour
                 Destroy(obj.GetComponent<Collider>());
                 trashes.Add(obj);
                 obj.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-                obj.GetComponent<Trash>().localPos = new Vector3(Random.Range(-2f, 2f), trashHeight, Random.Range(-2f, 2f));
+                obj.GetComponent<Trash>().localPos = new Vector3(Random.Range(-containerRadius, containerRadius), trashHeight, Random.Range(-containerRadius, containerRadius));
                 obj.GetComponent<Trash>().isCollected = true;
                 obj.GetComponent<Trash>().speed = speed + 5f ; 
                 //obj.transform.parent = boatContainer.transform;

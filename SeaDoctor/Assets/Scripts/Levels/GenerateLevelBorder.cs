@@ -6,12 +6,19 @@ public class GenerateLevelBorder : MonoBehaviour
 {
     public GameObject _float;
     public GameObject _beacon;
-    public float range;
     private Vector3 pivot;
     private Vector3[] direction;
     private float _range;
     private List<GameObject> list = new List<GameObject>();
-    private void Start()
+
+    private float offset = 0;
+
+    private void Update()
+    {
+        offset += Time.deltaTime;
+    }
+
+    public void GenerateBorder(float range)
     {
         _range = range;
         if (_range % 3 == 0)
@@ -30,12 +37,7 @@ public class GenerateLevelBorder : MonoBehaviour
             new Vector3(-3,0,0),
             new Vector3(0,-3,90)
         };
-        GenerateBorder();
-    }
-
-    public void GenerateBorder()
-    {
-        Debug.Log(_range * 2 / 3);
+        //Debug.Log(_range * 2 / 3);
         for (int k=0; k < 4; k++)
         {
             pivot = new Vector3(pivot.x + direction[k].x, 0, pivot.z + direction[k].y);
@@ -55,6 +57,12 @@ public class GenerateLevelBorder : MonoBehaviour
 
     private void FixedUpdate()
     {
-        
+        list.ForEach((GameObject e)=>
+        {
+            e.transform.position = new Vector3(
+                e.transform.position.x, 
+                Mathf.PerlinNoise(e.transform.position.x + offset, e.transform.position.z + offset) - 0.25f,
+                e.transform.position.z);
+        });
     }
 }

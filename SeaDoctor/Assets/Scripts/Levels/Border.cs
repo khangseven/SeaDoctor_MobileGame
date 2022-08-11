@@ -4,24 +4,19 @@ using UnityEngine;
 
 public class Border : MonoBehaviour
 {
-    public int radius;
+    public float radius;
     public int points;
     public LineRenderer lineRenderer;
 
     void Start()
     {
+        radius = GameObject.Find("LEVEL").GetComponent<Level>().minRange;
         Draw();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void Draw()
     {
-        lineRenderer.positionCount = points+1;
+        lineRenderer.positionCount = points+1 ;
         for (int i = 0; i <= points; i++)
         {
             float radian = i / (float)points * Mathf.PI * 2;

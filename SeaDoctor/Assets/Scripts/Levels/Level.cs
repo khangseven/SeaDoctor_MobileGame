@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class Level : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
+    public float maxRange;
+    public float minRange;
+    public int trashAmount;
+
+    public TrashSystem trashGenerate;
+    public GenerateLevelBorder borderGenerate;
+
+    private void Start()
     {
-        
+        borderGenerate.GenerateBorder(maxRange);
+        trashGenerate.randomTrash(maxRange,minRange,trashAmount);
     }
 }

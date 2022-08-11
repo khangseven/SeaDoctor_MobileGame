@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Trash
   - CheckPoint
+  - Boat
   layers:
   - Default
   - TransparentFX

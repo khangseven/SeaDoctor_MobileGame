@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Trash : MonoBehaviour
 {
@@ -49,6 +50,10 @@ public class Trash : MonoBehaviour
                     //Tao ra coin earning
                     Vector3 coinPos = GameObject.Find("Main Camera").GetComponent<Camera>().WorldToScreenPoint(factoryPos);
                     GameObject.Find("CoinSystem").GetComponent<CoinSystem>().CreateCoin(coinPos, (int)mass);
+
+                    //End
+
+                    
                 }
             }
         } 
