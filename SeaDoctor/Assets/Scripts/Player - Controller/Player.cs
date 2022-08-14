@@ -25,6 +25,7 @@ public class Player : MonoBehaviour
     public Text coinText;
     public Image coinBackground;
     public Slider volumeUI;
+    public Image fullImage;
 
     public float xRotationMax = 30f;
 
@@ -44,6 +45,9 @@ public class Player : MonoBehaviour
         rbody = GetComponent<Rigidbody>();
         currentVolume = 0;
         trashes = new List<GameObject>();
+
+        SaveLoad.Save(this);
+        Debug.Log(Application.persistentDataPath);
     }
 
     public void CoinAdding(int value)
@@ -94,6 +98,7 @@ public class Player : MonoBehaviour
             delayCount += Time.fixedDeltaTime;
             if (delayCount > delayTime) delayCount = 0;
         }
+
         //Simulator waving
        /* if (transform.eulerAngles.x + torqueSpeed >= xRotationMax && transform.eulerAngles.x <= xRotationMax)
         {
@@ -112,6 +117,17 @@ public class Player : MonoBehaviour
 
         //update volume ui
         volumeUI.value = currentVolume / volume;
+
+        //Full Warning
+        if (fullImage.enabled && currentVolume < volume)
+        {
+            fullImage.enabled = false;
+        }
+        else if(!fullImage.enabled && currentVolume == volume)
+        {
+            fullImage.enabled = true;
+        }
+        fullImage.transform.rotation = Quaternion.LookRotation(transform.position - mainCamera.transform.position);
     }
 
     private void OnTriggerEnter(Collider col)
@@ -120,6 +136,10 @@ public class Player : MonoBehaviour
         if (obj.CompareTag("CheckPoint"))
         {
             onCheckPoint = true;
+        }
+        else if(obj.CompareTag("Animals"))
+        {
+
         }
     }
 
@@ -140,7 +160,7 @@ public class Player : MonoBehaviour
             Trash trash = obj.GetComponent<Trash>();
             if (currentVolume + trash.mass > volume)
             {
-                Debug.Log("Full");
+                
             }
             else
             {

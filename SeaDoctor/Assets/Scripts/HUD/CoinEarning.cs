@@ -6,7 +6,7 @@ public class CoinEarning : MonoBehaviour
 {
     private RectTransform targetPos;
     private RectTransform rect;
-    private float speed = 20f;
+    private float speed = 30f;
     private GameObject Player;
     public int coin;
 
