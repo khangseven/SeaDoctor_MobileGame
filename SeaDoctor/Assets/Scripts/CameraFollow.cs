@@ -5,7 +5,7 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
 
-    private Vector3 _defaultAngle = new Vector3(50,180,0);
+    public Vector3 _defaultAngle = new Vector3(50,180,0);
     private Vector3 _topDownAngle = new Vector3(90, 180, 0);
     private Vector2 _defaultOffset = new Vector2(30, 25);
     private Vector2 _topDownOffset = new Vector2(35, 0);

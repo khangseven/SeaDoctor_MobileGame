@@ -32,16 +32,31 @@ public class Salvage : MonoBehaviour
 
     private bool isPointing;
 
+    private bool start=false;
+    public RectTransform preSalvage;
+    public RectTransform panel;
+
     public void setup()
     {
         slider.rectTransform.sizeDelta = new Vector2(slider.rectTransform.sizeDelta.x, sliderSize);
         minRange = -range + sliderSize/2 ;
         maxRange = range - sliderSize/2;
         currentVolume = 0;
+        zeroCount = 0;
+        pivotBigCount = 0;
+        pivotCount = 0 ;
+        currentVolume = 0;
+        sliderVelocity=0;
+        pivotVelocity=0;
     }
 
     // Start is called before the first frame update
     void Start()
+    {
+        setup();
+    }
+
+    private void OnEnable()
     {
         setup();
     }
@@ -61,8 +76,18 @@ public class Salvage : MonoBehaviour
         isPointing = false;
     }
 
+    public void Play()
+    {
+        preSalvage.gameObject.SetActive(false);
+        start = true;
+    }
+
+    private float zeroCount;
+
     private void FixedUpdate()
     {
+        if (!start) return;
+
         pivotCount += Time.fixedDeltaTime;
         if(pivotCount > pivotDelayTime)
         {
@@ -114,5 +139,32 @@ public class Salvage : MonoBehaviour
             currentVolume = 0;
         }
         GetComponent<Slider>().value = currentVolume/ volume;
+
+
+        if (currentVolume == 0)
+        {
+            zeroCount += Time.fixedDeltaTime;
+        }
+        else
+        {
+            zeroCount = 0;
+        }
+
+        if (zeroCount > 4)
+        {
+            start = false;
+            panel.gameObject.SetActive(false);
+            GameObject.Find("Player").GetComponent<Player>().helpComplete(false);
+            preSalvage.gameObject.SetActive(true);
+        }
+
+        if(currentVolume == volume)
+        {
+            
+            start = false;
+            panel.gameObject.SetActive(false);
+            GameObject.Find("Player").GetComponent<Player>().helpComplete(true);
+            preSalvage.gameObject.SetActive(true);
+        }
     }
 }

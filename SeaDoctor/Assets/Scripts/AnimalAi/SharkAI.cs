@@ -26,18 +26,14 @@ public class SharkAI : MonoBehaviour
     {
         maxRange = GameObject.Find("LEVEL").GetComponent<Level>().maxRange;
         minRange = GameObject.Find("LEVEL").GetComponent<Level>().minRange;
-        help.enabled = false;
-        if (gameObject.CompareTag("Animals"))
-        {
-            help.enabled = true;
-        }
+        //help.enabled = false;
+       
     }
 
     private void FixedUpdate()
     {
         if (gameObject.CompareTag("Animals"))
         {
-           
 
         }
         else if (gameObject.CompareTag("Friendly"))
@@ -124,7 +120,7 @@ public class SharkAI : MonoBehaviour
         {
             if ((desTrash.position - transform.position).magnitude < 0.5f)
             {
-                Debug.Log("GET");
+                //Debug.Log("GET");
                 haveTrash = true;
                 GameObject obj = desTrash.gameObject;
                 Destroy(obj.GetComponent<Collider>());

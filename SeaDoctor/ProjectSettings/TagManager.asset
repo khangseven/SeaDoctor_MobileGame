@@ -9,6 +9,7 @@ TagManager:
   - Boat
   - Animals
   - Friendly
+  - Friendly1
   layers:
   - Default
   - TransparentFX
