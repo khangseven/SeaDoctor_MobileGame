@@ -10,7 +10,7 @@ public class TrashSystem : MonoBehaviour
     public GameObject parent;
 
 
-    public void randomTrash(float range,float minRange, int trashAmount) { 
+    public void randomTrash(float range,float minRange, int trashAmount,List<GameObject> list) { 
         
         for(int k=0; k< trashes.Length; k++){
             for(int i=0; i< trashAmount; i++){
@@ -21,6 +21,7 @@ public class TrashSystem : MonoBehaviour
                 }
                 GameObject temp = Instantiate(trashes[k],new Vector3(randVec.x + transform.position.x,trashes[k].transform.position.y,randVec.y + transform.position.z),Random.rotation);
                 //Debug.Log(trashes[k].transform.position.y);
+                list.Add(temp);
                 temp.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY;
                 temp.transform.parent = parent.transform;
             }

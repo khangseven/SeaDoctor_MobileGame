@@ -20,8 +20,6 @@ public class Salvage : MonoBehaviour
     private float currentVolume=0;
     private float volumeOffset = 0.08f;
 
-   
-
     private float pivotVelocity;
     private float pivotRange = 320f;
     private float pivotDelayTime = 0.1f;
@@ -35,6 +33,8 @@ public class Salvage : MonoBehaviour
     private bool start=false;
     public RectTransform preSalvage;
     public RectTransform panel;
+
+
 
     public void setup()
     {
@@ -164,6 +164,7 @@ public class Salvage : MonoBehaviour
             start = false;
             panel.gameObject.SetActive(false);
             GameObject.Find("Player").GetComponent<Player>().helpComplete(true);
+            GameObject.Find("LEVEL").GetComponent<Level>().setRes();
             preSalvage.gameObject.SetActive(true);
         }
     }

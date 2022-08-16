@@ -16,7 +16,16 @@ public class SaveLoad
 
         binaryFormatter.Serialize(fileStream, playerData);
         fileStream.Close();
-    }   
+    }
+
+    public static void Save2(PlayerData player)
+    {
+        BinaryFormatter binaryFormatter = new BinaryFormatter();
+        string path = Application.persistentDataPath + "/player.dat";
+        FileStream fileStream = new FileStream(path, FileMode.Create);
+        binaryFormatter.Serialize(fileStream, player);
+        fileStream.Close();
+    }
 
     public static PlayerData Load()
     {
@@ -31,7 +40,7 @@ public class SaveLoad
         }
         else
         {
-            Debug.Log("Cant load");
+            //Save2(new PlayerData());
             return null;
         }
     }

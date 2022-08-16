@@ -8,18 +8,17 @@ public class TurtleAI : MonoBehaviour
 {
     public NavMeshAgent agent;
     public float maxRange, minRange;
-    public Transform factory;
     public Image help;
+    public Transform enemies;
     private Vector3 destination;
     private Vector3 lastVelocity;
+    public Slider slider;
 
-    private List<Trash> trashes;
-    private bool haveTrash;
+    public Transform selectedEnemy;
 
-    private bool waiting;
-    private float waitTime = 20f;
-
-    private bool onPoint=false;
+    public bool waiting;
+    private float waitTime = 25f;
+    private float waitCount = 0;
 
     private float count;
     private float timeOffset = 3f;
@@ -30,6 +29,7 @@ public class TurtleAI : MonoBehaviour
         maxRange = GameObject.Find("LEVEL").GetComponent<Level>().maxRange;
         minRange = GameObject.Find("LEVEL").GetComponent<Level>().minRange;
         //help.enabled = false;
+        waiting = true;
     }
 
     private void FixedUpdate()
@@ -44,26 +44,77 @@ public class TurtleAI : MonoBehaviour
         }
 
         help.transform.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position);
+        slider.transform.rotation = Quaternion.LookRotation(transform.position - Camera.main.transform.position);
     }
 
     void whenFriendly()
     {
-
-        if (onPoint)
+        slider.value = waitCount / waitTime;
+        if (enemies.childCount == 0)
         {
-            
+            agent.speed = 8f;
+            agent.acceleration = 8f;
+            count += Time.fixedDeltaTime;
+            if (count > timeOffset)
+            {
+                destination = RandomDesination();
+                count = 0;
+            }
         }
-
-
-
-
-
-        count += Time.fixedDeltaTime;
-        if (count > timeOffset)
+        else
         {
-            destination = RandomDesination();
-            count = 0;
+            if (waiting)
+            {
+                agent.speed = 8f;
+                agent.acceleration = 8f;
+
+                waitCount += Time.deltaTime;
+                if (waitCount >= waitTime)
+                {
+                    waiting = false;
+                }
+
+                count += Time.fixedDeltaTime;
+                if (count > timeOffset)
+                {
+                    destination = RandomDesination();
+                    count = 0;
+                }
+
+            }
+            else
+            {
+                //find child
+                if (!selectedEnemy && enemies.childCount > 0)
+                {
+                    selectedEnemy = enemies.transform.GetChild(0);
+                    float distance = 5f;
+
+                    for (int i = 0; i < enemies.transform.childCount; i++)
+                    {
+                        float temp = (enemies.transform.GetChild(i).transform.position - transform.position).magnitude;
+                        if (temp < distance)
+                        {
+                            distance = temp;
+                            selectedEnemy = enemies.transform.GetChild(i);
+                        }
+                    }
+                }
+                if (selectedEnemy)
+                {
+                    destination = selectedEnemy.transform.position;
+                    agent.speed = 20f;
+                    agent.acceleration = 20f;
+                    if ((transform.position - selectedEnemy.position).magnitude <= 2f)
+                    {
+                        selectedEnemy.GetComponent<Enemy>().takeDamage(20);
+                        waiting = true;
+                        waitCount = 0;
+                    }
+                }
+            }
         }
+        
 
         //Go to Des
         NavMeshHit hit;
@@ -95,23 +146,5 @@ public class TurtleAI : MonoBehaviour
             randVec = randVec * ((minRange + Random.Range(0, range - minRange)) / randVec.magnitude);
         }
         return new Vector3(randVec.x, transform.position.y, randVec.y);
-    }
-
-    private void OnTriggerEnter(Collider col)
-    {
-        GameObject obj = col.gameObject;
-        if (obj.CompareTag("CheckPoint"))
-        {
-            onPoint = true;
-        }
-    }
-
-    private void OnTriggerExit(Collider col)
-    {
-        GameObject obj = col.gameObject;
-        if (obj.CompareTag("CheckPoint"))
-        {
-            onPoint = false;
-        }
     }
 }

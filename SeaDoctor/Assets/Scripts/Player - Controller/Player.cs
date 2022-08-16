@@ -11,7 +11,8 @@ public class Player : MonoBehaviour
     public Camera mainCamera;
     public Vector2 CamHeight = new Vector2(30, 25);
     private Rigidbody rbody;
-
+    public Transform collector;
+    public ItemsGenerate ItemsGenerate;
     public float volume;
     public float currentVolume;
     public float speed = 10f;
@@ -19,7 +20,12 @@ public class Player : MonoBehaviour
     public GameObject bullet;
     public Transform gun;
     public Transform gunHead;
+    public Transform gunAnchor;
     public Transform enemies;
+
+    private float shotDelay = 0.5f;
+    private float shotCount = 0f;
+    private float gunDamage = 3f;
 
     public GameObject boatContainer;
     public List<GameObject> trashes;
@@ -30,6 +36,10 @@ public class Player : MonoBehaviour
     public Slider volumeUI;
     public Image fullImage;
 
+    public Image img1;
+    public Image img2;
+    public Image img3;
+
     public float xRotationMax = 30f;
 
     public float containerRadius;
@@ -39,7 +49,7 @@ public class Player : MonoBehaviour
     private int trashRemoveCount = 0;
 
     public bool onCheckPoint = false;
-    private float delayTime = 0.1f;
+    private float delayTime = 0.05f;
     private float delayCount = 0f;
 
     private bool animalsHelp=false;
@@ -51,17 +61,22 @@ public class Player : MonoBehaviour
 
     public RectTransform animalText;
     public RectTransform Salvage;
-    
 
+    public int _speed;
+    public int _collector;
+    public int _gun;
+    public int _volume;
+    public bool[] friends;
+    public int levelCompleted;
 
     void Start()
     {
         rbody = GetComponent<Rigidbody>();
         currentVolume = 0;
         trashes = new List<GameObject>();
-
-        SaveLoad.Save(this);
-        Debug.Log(Application.persistentDataPath);
+        
+        SaveLoad.Load().updatePlayer(this);
+        levelCompleted = GameObject.Find("LEVEL").GetComponent<Level>().level; ;
     }
 
     public void CoinAdding(int value)
@@ -81,7 +96,7 @@ public class Player : MonoBehaviour
                 if (angle < 0) angle = 360 + angle;
                 transform.rotation = Quaternion.Euler(transform.eulerAngles.x, angle, 0);
             }
-            rbody.velocity = new Vector3(-joystickController.Velocity.x * speed, 0, -joystickController.Velocity.y * speed);
+            rbody.velocity = new Vector3(-joystickController.Velocity.x * (speed + _speed) *(item1 ? 2 : 1), 0, -joystickController.Velocity.y * (speed + _speed) * (item1 ? 2 : 1));
         }
     }
 
@@ -100,15 +115,16 @@ public class Player : MonoBehaviour
        
     }
 
+    
     private void Guning()
     {
+        shotCount += Time.fixedDeltaTime;
         if (enemies.childCount == 0) return;
         //find Near
         Transform selectedEnemy = null;
-        float distance = (enemies.transform.GetChild(0).transform.position - transform.position).magnitude;
-        selectedEnemy = enemies.transform.GetChild(0);
+        float distance = item3 ? 10f : 5f;
         
-        for (int i=1;i< enemies.transform.childCount;i++)
+        for (int i=0;i< enemies.transform.childCount;i++)
         {
             float temp = (enemies.transform.GetChild(i).transform.position - transform.position).magnitude;
             if (temp < distance)
@@ -117,22 +133,111 @@ public class Player : MonoBehaviour
                 selectedEnemy = enemies.transform.GetChild(i);
             }
         }
+
+        if (!selectedEnemy) return;
+
         //rotate
-        Quaternion q = Quaternion.LookRotation(selectedEnemy.position - gun.position);
-        if(selectedEnemy.position.z < gun.position.z)
+
+        float angle = Vector2.SignedAngle(new Vector2(gun.transform.position.x - gunAnchor.position.x, gun.transform.position.z - gunAnchor.position.z)
+            , new Vector2(gun.transform.position.x - selectedEnemy.position.x, gun.transform.position.z - selectedEnemy.position.z));
+        gun.eulerAngles = new Vector3(0,-angle + transform.eulerAngles.y, 0);
+
+        //shot
+
+        
+        if (shotCount > shotDelay)
         {
-            q = q * Quaternion.Euler(0, 90, 0);
+            shotCount = 0;
+            Instantiate(bullet,gunHead.position,bullet.transform.rotation,null);
+            
+            bullet.GetComponent<Bullet>().destination = selectedEnemy;
+            bullet.GetComponent<Bullet>().Damage = item3 ? (gunDamage + _gun) *2 : gunDamage + _gun;
+            bullet.GetComponent<Bullet>().go = true;
+        }
+
+    }
+
+    private float itemTime1 = 15f;
+    private float itemTime2 = 15f;
+    private float itemTime3 = 15f;
+
+    private float itemCount1 = 0f;
+    private float itemCount2 = 0f;
+    private float itemCount3 = 0f;
+
+    public bool item1 = false;
+    public bool item2 = false;
+    public bool item3 = false;
+
+    private void gotItem(int i)
+    {
+        if (i == 1)
+        {
+            item1 = true;
+            itemCount1 = 0;
+        }else if (i == 2)
+        {
+            item2 = true;
+            itemCount2 = 0;
         }
         else
         {
-            q = q * Quaternion.Euler(0, -180, 0);
+            item3 = true;
+            itemCount3 = 0;
         }
-        gun.rotation = new Quaternion(gun.rotation.x, q.y ,gun.rotation.z, gun.rotation.w);
-        //shot
     }
+
+    private void itemTimer()
+    {
+        if (item1)
+        {
+            itemCount1 += Time.fixedDeltaTime;
+            if(itemCount1>= itemTime1)
+            {
+                item1 = false;
+                itemCount1 = 0;
+            }
+        }
+        if (item2)
+        {
+            itemCount2 += Time.fixedDeltaTime;
+            if (itemCount2 >= itemTime2)
+            {
+                item2 = false;
+                itemCount2 = 0;
+            }
+        }
+        if (item3)
+        {
+            itemCount3 += Time.fixedDeltaTime;
+            if (itemCount3 >= itemTime3)
+            {
+                item3 = false;
+                itemCount3 = 0;
+            }
+        }
+    }
+
+    
 
     private void FixedUpdate()
     {
+        if (item1) img1.gameObject.SetActive(true);
+        else img1.gameObject.SetActive(false);
+        if (item2) img2.gameObject.SetActive(true);
+        else img2.gameObject.SetActive(false);
+        if (item3) img3.gameObject.SetActive(true);
+        else img3.gameObject.SetActive(false);
+
+        itemTimer();
+        if (item2)
+        {
+            collector.transform.localScale = new Vector3(2.994882f, 1, (1 + 0.2f * _collector) *3);
+        }
+        else
+        {
+            collector.transform.localScale = new Vector3(2.994882f, 1, 1 + 0.2f * _collector);
+        }
         //On check point = true => Tra hang
         if (onCheckPoint)
         {
@@ -256,6 +361,12 @@ public class Player : MonoBehaviour
             rbody.velocity = Vector3.zero;
             obj.transform.Find("Animals_Canvas").GetChild(0).GetComponent<Image>().enabled = false;
         }
+        if (obj.CompareTag("Items"))
+        {
+            Debug.Log("item");
+            gotItem(obj.GetComponent<Items>().type);
+            Destroy(obj);
+        }
     }
 
     private void OnTriggerExit(Collider col)
@@ -272,6 +383,7 @@ public class Player : MonoBehaviour
         }
     }
 
+    private float itemsRandomCount = 0f;
     private void OnCollisionEnter(Collision col)
     {
         GameObject obj = col.gameObject;
@@ -299,8 +411,20 @@ public class Player : MonoBehaviour
                     trashCount = 0;
                     trashHeight += .3f;
                 }
+
+                itemsRandomCount++;
+                if(itemsRandomCount > 80)
+                {
+                    ItemsGenerate.randomItem();
+                    itemsRandomCount = 0;
+                }
             }
 
         }
+    }
+
+    public void volumeUp()
+    {
+        volume += 25 * _volume;
     }
 }

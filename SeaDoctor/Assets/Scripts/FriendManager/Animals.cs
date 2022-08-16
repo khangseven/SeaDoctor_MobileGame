@@ -27,13 +27,15 @@ public class Animals : MonoBehaviour
         DestroyImmediate(vfx.gameObject);
         
         successOkay = false;
+        successText.GetChild(1).GetComponent<Text>().text = Description;
         successText.gameObject.SetActive(true);
         yield return new WaitUntil(() => successOkay == true);
         successOkay = false;
         successText.gameObject.SetActive(false);
-        gameObject.tag = "Friendly1";
+        gameObject.tag = "Friendly";
+        //GameObject.Find("Player").GetComponent<Player>().friends[ID]=true;
         doLast();
-        DestroyImmediate(gameObject);
+        //DestroyImmediate(gameObject);
     }
 
     public void rescureOkay()

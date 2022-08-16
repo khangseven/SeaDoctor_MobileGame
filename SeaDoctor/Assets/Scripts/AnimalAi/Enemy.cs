@@ -10,8 +10,12 @@ public class Enemy : MonoBehaviour
     public float maxRange, minRange;
     public Transform Player;
     public Slider slider;
+
+    public ItemsGenerate ItemsGenerate;
+
     private Vector3 destination;
     private Vector3 lastVelocity;
+
 
     private float HP;
     private float currentHP;
@@ -19,9 +23,11 @@ public class Enemy : MonoBehaviour
     private float count;
     private float timeOffset = 3f;
 
+
     // Start is called before the first frame update
     void Start()
     {
+        ItemsGenerate = GameObject.Find("ItemsSystem").GetComponent<ItemsGenerate>();
         HP = 10;
         currentHP = 10;
         maxRange = GameObject.Find("LEVEL").GetComponent<Level>().maxRange;
@@ -38,6 +44,7 @@ public class Enemy : MonoBehaviour
 
     void whenFriendly()
     {
+
         count += Time.fixedDeltaTime;
         if (count > timeOffset)
         {
@@ -75,5 +82,24 @@ public class Enemy : MonoBehaviour
             randVec = randVec * ((minRange + Random.Range(0, range - minRange)) / randVec.magnitude);
         }
         return new Vector3(randVec.x, transform.position.y, randVec.y);
+    }
+
+    public void takeDamage(float damage)
+    {
+        currentHP -= damage;
+
+        agent.acceleration += 5;
+        agent.speed +=5;
+        timeOffset -= 0.8f;
+
+        if (currentHP <= 0)
+        {
+            float r = Random.Range(0, 10);
+            if (r > 7)
+            {
+                ItemsGenerate.crateAtPosition(transform.position);
+            }
+            Destroy(gameObject);
+        }
     }
 }
