@@ -12744,12 +12744,12 @@ PrefabInstance:
     - target: {fileID: 5527371836894485335, guid: a6c4ec84f8ee2f741ae09e5960a3dd9a,
         type: 3}
       propertyPath: friends.Array.data[0]
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5527371836894485335, guid: a6c4ec84f8ee2f741ae09e5960a3dd9a,
         type: 3}
       propertyPath: friends.Array.data[1]
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5527371836898726244, guid: a6c4ec84f8ee2f741ae09e5960a3dd9a,
         type: 3}

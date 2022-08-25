@@ -127,7 +127,7 @@ public class Salvage : MonoBehaviour
 
         if(Mathf.Abs(pivot.rectTransform.anchoredPosition.y - slider.rectTransform.anchoredPosition.y) < sliderSize / 2)
         {
-            currentVolume += volumeOffset;
+            currentVolume += volumeOffset + 0.1f;
         }else currentVolume -= volumeOffset;
 
         if (currentVolume > volume)

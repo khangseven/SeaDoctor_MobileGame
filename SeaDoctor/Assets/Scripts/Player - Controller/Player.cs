@@ -76,7 +76,8 @@ public class Player : MonoBehaviour
         trashes = new List<GameObject>();
         
         SaveLoad.Load().updatePlayer(this);
-        levelCompleted = GameObject.Find("LEVEL").GetComponent<Level>().level; ;
+        levelCompleted = GameObject.Find("LEVEL").GetComponent<Level>().level;
+        volume += 25 * _volume;
     }
 
     public void CoinAdding(int value)
